@@ -1,5 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+/* Neumorphism theme variables */
+:root {
+  --neu-bg: #383838;
+  --neu-bg-subtle: #3d3d3d;
+  --neu-shadow-dark: #2a2a2a;
+  --neu-shadow-light: #4a4a4a;
+  --neu-raised: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light);
+  --neu-raised-sm: 4px 4px 8px var(--neu-shadow-dark), -4px -4px 8px var(--neu-shadow-light);
+  --neu-inset: inset 6px 6px 12px var(--neu-shadow-dark), inset -6px -6px 12px var(--neu-shadow-light);
+  --neu-inset-sm: inset 3px 3px 6px var(--neu-shadow-dark), inset -3px -3px 6px var(--neu-shadow-light);
+  --neu-radius: 16px;
+  --neu-radius-sm: 12px;
+  --neu-text: #e8e8e8;
+  --neu-text-dim: rgba(255, 255, 255, 0.6);
+  --neu-accent: #6366f1;
+  --neu-accent-glow: rgba(99, 102, 241, 0.35);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -15,16 +33,8 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* Deep gradient background — glass panels float on top of this */
-  background: #0d1117;
-  background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.18) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.14) 0%, transparent 50%),
-    radial-gradient(ellipse at 60% 80%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
-    linear-gradient(160deg, #0d1117 0%, #131929 50%, #0d1230 100%);
-  background-attachment: fixed;
-  color: rgba(255, 255, 255, 0.85);
+  background: var(--neu-bg);
+  color: var(--neu-text);
 }
 
 #root {
