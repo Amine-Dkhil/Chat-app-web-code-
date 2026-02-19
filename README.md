@@ -1,12 +1,12 @@
 # Chat App
 
-A React chatbot with Gemini AI, user auth, MongoDB persistence, and client-side data analysis. Glassmorphism UI with streaming responses, CSV upload, code execution, and interactive charts.
+A React chatbot with **Gemini 2.5 Flash** AI, user auth, MongoDB persistence, and client-side data analysis. **Neumorphism-style UI** (soft shadows, raised/inset surfaces) with streaming responses, CSV upload, code execution, and interactive charts.
 
 ## How It Works
 
-- **Frontend (React)** – Login/create account, chat UI with streaming, drag-and-drop CSV/images, Recharts bar charts
+- **Frontend (React)** – Login/create account, neumorphic chat UI with streaming, drag-and-drop CSV/images, Recharts bar charts
 - **Backend (Express)** – REST API for users and sessions, connects to MongoDB
-- **AI (Gemini)** – Streaming chat, Google Search grounding, Python code execution, and function calling for client-side tools
+- **AI (Gemini 2.5 Flash)** – Streaming chat, Google Search grounding, Python code execution, and function calling for client-side tools
 - **Storage (MongoDB)** – Users and chat sessions stored in `chatapp` database
 
 ## API Keys & Environment Variables
@@ -226,6 +226,7 @@ All packages are installed via `npm install`. Key dependencies:
 - **Tool routing logic** – The app automatically routes requests: client-side JS tools for simple stats, Python code execution for plots and complex models, Google Search for factual queries
 - **Markdown rendering** – AI responses render headers, lists, code blocks, tables, and links
 - **Image support** – Attach images via drag-and-drop, the 📎 button, or paste from clipboard (Ctrl+V)
+- **Neumorphism UI** – Soft UI design with raised panels, inset inputs, and dual shadows for a tactile look (dark theme)
 
 ## Chat System Prompt
 
