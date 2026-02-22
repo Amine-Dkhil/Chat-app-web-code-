@@ -8,8 +8,8 @@ A React chatbot with **Gemini 2.5 Flash** AI, user auth, MongoDB persistence, an
 
 1. **Clone the repo**
    ```bash
-   git clone <your-repo-url>
-   cd chatapp_websearch_code
+   git clone https://github.com/Amine-Dkhil/Chat-app-web-code-.git
+   cd Chat-app-web-code-
    ```
 
 2. **Install dependencies**
