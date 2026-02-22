@@ -21,15 +21,15 @@ export default function MetricVsTimeChart({ data, metric, onEnlarge }) {
 
   const handleDownload = (e) => {
     e.stopPropagation();
-    const wrap = document.querySelector('.metric-vs-time-chart');
-    const svg = wrap?.querySelector('svg');
-    if (!svg) return;
-    const svgData = new XMLSerializer().serializeToString(svg);
-    const blob = new Blob([svgData], { type: 'image/svg+xml' });
+    const headers = ['date', 'value'];
+    const headerRow = headers.join(',');
+    const rows = data.map((row) => [row.date, row.value].join(','));
+    const csv = [headerRow, ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `metric-vs-time-${metric}.svg`;
+    a.download = `metric-vs-time-${metric}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
