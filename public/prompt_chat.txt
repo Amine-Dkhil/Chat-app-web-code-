@@ -29,7 +29,11 @@ TOOLS — purpose and when to use:
    Purpose: Compute mean, median, std, min, and max for any numeric field in the channel JSON (e.g. view_count, like_count, comment_count, duration).
    Use when: the user asks for statistics, average, or distribution of a numeric column.
 
-5. get_transcript (optional)
+5. get_video_metric
+   Purpose: Get a single metric (view_count, like_count, comment_count, duration, release_date) for one video. Specify the video by ordinal ("first", "second", "1"), "most viewed", or partial title.
+   Use when: the user asks for one value for one video (e.g. "likes of the first video", "view count of the most viewed", "comments on the asbestos video").
+
+6. get_transcript (optional)
    Purpose: Return the full transcript/captions for a video. Pick by ordinal or "most viewed".
    Use when: the user asks for transcript, captions, or "what was said" in a video.
 

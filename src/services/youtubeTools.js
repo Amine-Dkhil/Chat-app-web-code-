@@ -82,6 +82,25 @@ export const YOUTUBE_TOOL_DECLARATIONS = [
       required: ['field'],
     },
   },
+  {
+    name: 'get_video_metric',
+    description:
+      'Get a single metric (e.g. like_count, view_count, comment_count, duration) for one video. Use when the user asks for a specific value for one video, e.g. "likes of the first video", "view count of the most viewed", "comments on the asbestos video".',
+    parameters: {
+      type: 'OBJECT',
+      properties: {
+        selector: {
+          type: 'STRING',
+          description: 'How to pick the video: "first", "second", "1", "2", "most viewed", or a partial title (e.g. "asbestos").',
+        },
+        field: {
+          type: 'STRING',
+          description: 'Numeric or date field. Common: view_count, like_count, comment_count, duration, release_date. ' + FIELD_NOTE,
+        },
+      },
+      required: ['selector', 'field'],
+    },
+  },
 ];
 
 // ── Parse ISO 8601 duration (e.g. PT15M33S) to seconds ────────────────────────
@@ -305,6 +324,34 @@ export function executeYouTubeTool(toolName, args, videos) {
         };
       }
       return { error: `Could not find video for selector "${args.selector}"` };
+    }
+
+    case 'get_video_metric': {
+      const sel = String(args.selector || '').toLowerCase().trim();
+      const field = resolveField(arr, args.field);
+      let vid = null;
+      if (/^most\s*viewed$/i.test(sel)) {
+        const sorted = [...arr].sort((a, b) => (b.view_count ?? b.viewCount ?? 0) - (a.view_count ?? a.viewCount ?? 0));
+        vid = sorted[0];
+      } else if (/^first|1(st)?$/i.test(sel)) vid = arr[0];
+      else if (/^second|2(nd)?$/i.test(sel)) vid = arr[1];
+      else if (/^third|3(rd)?$/i.test(sel)) vid = arr[2];
+      else {
+        const num = parseInt(sel, 10);
+        if (!isNaN(num) && num >= 1) vid = arr[num - 1];
+        else vid = arr.find((v) => (v.title || '').toLowerCase().includes(sel));
+      }
+      if (!vid) return { error: `Could not find video for selector "${args.selector}"` };
+      let value = getMetricValue(vid, field);
+      if (value === undefined || value === null) value = vid[field];
+      if (field === 'duration') value = parseDuration(value);
+      else if (typeof value === 'string' && field !== 'release_date' && field !== 'releaseDate') value = parseFloat(value);
+      return {
+        title: vid.title,
+        video_id: vid.video_id,
+        field,
+        value: value != null && value !== '' ? value : null,
+      };
     }
 
     default:
