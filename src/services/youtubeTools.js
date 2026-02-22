@@ -104,6 +104,11 @@ const METRIC_ALIASES = {
   commentcount: 'comment_count', comments: 'comment_count', commentcounts: 'comment_count',
 };
 
+const SNAKE_TO_CAMEL = {
+  like_count: 'likeCount', view_count: 'viewCount', comment_count: 'commentCount',
+  release_date: 'releaseDate',
+};
+
 function resolveField(videos, name) {
   if (!name || typeof name !== 'string') return name;
   const first = videos?.[0];
@@ -113,7 +118,27 @@ function resolveField(videos, name) {
   const target = norm(name);
   const aliased = METRIC_ALIASES[target];
   if (aliased && keys.includes(aliased)) return aliased;
-  return keys.find((k) => norm(k) === target) || name;
+  const found = keys.find((k) => norm(k) === target);
+  if (found) return found;
+  if (aliased) return aliased;
+  return name;
+}
+
+function getDateMs(v) {
+  const t = v.release_date || v.releaseDate || v.publishedAt || v.published_at;
+  if (!t) return null;
+  const ms = new Date(t).getTime();
+  return Number.isFinite(ms) ? ms : null;
+}
+
+function getMetricValue(v, metric) {
+  let val = v[metric];
+  if (val !== undefined && val !== null) return val;
+  const camel = SNAKE_TO_CAMEL[metric];
+  if (camel && v[camel] !== undefined && v[camel] !== null) return v[camel];
+  const snake = Object.keys(SNAKE_TO_CAMEL).find((k) => SNAKE_TO_CAMEL[k] === metric);
+  if (snake && v[snake] !== undefined && v[snake] !== null) return v[snake];
+  return undefined;
 }
 
 function numericValues(videos, field) {
@@ -168,12 +193,15 @@ export function executeYouTubeTool(toolName, args, videos) {
       const metric = resolveField(arr, args.metric);
       const points = arr
         .map((v) => {
-          const x = v.release_date ? new Date(v.release_date).getTime() : null;
-          let y = v[metric];
+          const x = getDateMs(v);
+          let y = getMetricValue(v, metric);
+          if (y === undefined || y === null) y = v[metric];
           if (metric === 'duration') y = parseDuration(y);
           else if (typeof y === 'string') y = parseFloat(y);
           if (x == null || (y !== 0 && !y)) return null;
-          return { x, y: typeof y === 'number' ? y : parseFloat(y) };
+          const numY = typeof y === 'number' ? y : parseFloat(y);
+          if (numY !== 0 && !Number.isFinite(numY)) return null;
+          return { x, y: numY };
         })
         .filter(Boolean)
         .sort((a, b) => a.x - b.x);
