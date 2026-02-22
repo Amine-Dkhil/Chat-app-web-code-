@@ -2,6 +2,41 @@
 
 A React chatbot with **Gemini 2.5 Flash** AI, user auth, MongoDB persistence, and client-side data analysis. **Neumorphism-style UI** (soft shadows, raised/inset surfaces) with streaming responses, CSV upload, code execution, and interactive charts.
 
+---
+
+## Quick Start (run locally after cloning)
+
+1. **Clone the repo**
+   ```bash
+   git clone <your-repo-url>
+   cd chatapp_websearch_code
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Environment variables**  
+   Copy the example file and add your own keys:
+   ```bash
+   copy .env.example .env
+   ```
+   Edit `.env` and set:
+   - `REACT_APP_GEMINI_API_KEY` — [Google AI Studio](https://aistudio.google.com/apikey)
+   - `REACT_APP_MONGODB_URI` — MongoDB Atlas connection string
+   - `REACT_APP_YOUTUBE_API_KEY` — [YouTube Data API v3](https://console.cloud.google.com/apis/credentials) (for Channel Download tab)
+
+4. **Run the app**
+   ```bash
+   npm start
+   ```
+   Opens the frontend at **http://localhost:3000** and the backend at **http://localhost:3001**. Use the app at http://localhost:3000.
+
+**Pre-downloaded channel data:** `public/veritasium-channel-data.json` contains 10 videos from https://www.youtube.com/@veritasium so you can test without running the download. Drag this file into the chat to load it.
+
+---
+
 ## How It Works
 
 - **Frontend (React)** – Login/create account, neumorphic chat UI with streaming, drag-and-drop CSV/images, Recharts bar charts

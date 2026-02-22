@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { CSV_TOOL_DECLARATIONS } from './csvTools';
+import { YOUTUBE_TOOL_DECLARATIONS } from './youtubeTools';
 
 const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY || '');
 
@@ -191,4 +192,77 @@ export const chatWithCsvTools = async (history, newMessage, csvHeaders, executeF
   }
 
   return { text: response.text(), charts, toolCalls };
+};
+
+// ── Function-calling chat for YouTube tools ───────────────────────────────────
+// executeFn(toolName, args) → Promise<plain object>
+// Supports async (e.g. generateImage calls backend).
+// imageParts: optional [{ mimeType, data }] — not sent to chat; tool handler has anchor for image API.
+
+const MAX_HISTORY_TURNS = 12; // keep last N user+model pairs to stay under 1M token limit
+
+export const chatWithYouTubeTools = async (history, newMessage, executeFn, imageParts = []) => {
+  const systemInstruction = await loadSystemPrompt();
+  const model = genAI.getGenerativeModel({
+    model: MODEL,
+    tools: [{ functionDeclarations: YOUTUBE_TOOL_DECLARATIONS }],
+  });
+
+  const trimmed = history.length > MAX_HISTORY_TURNS * 2
+    ? history.slice(-MAX_HISTORY_TURNS * 2)
+    : history;
+  const baseHistory = trimmed.map((m) => ({
+    role: m.role === 'user' ? 'user' : 'model',
+    parts: [{ text: (m.content || '').slice(0, 8000) }],
+  }));
+
+  const chatHistory = systemInstruction
+    ? [
+        {
+          role: 'user',
+          parts: [{ text: `Follow these instructions in every response:\n\n${systemInstruction}` }],
+        },
+        { role: 'model', parts: [{ text: "Got it! I'll follow those instructions." }] },
+        ...baseHistory,
+      ]
+    : baseHistory;
+
+  const chat = model.startChat({ history: chatHistory });
+
+  // Do NOT send the full image to the chat model (avoids 1M token limit).
+  const messageParts = imageParts?.length
+    ? `${newMessage}\n\n[The user attached an image as reference for image generation. Call the generateImage tool with their prompt; the attached image will be used as the anchor.]`
+    : newMessage;
+
+  let response = (await chat.sendMessage(messageParts)).response;
+
+  const charts = [];
+  const toolCalls = [];
+  const generatedImages = [];
+  const playVideos = [];
+
+  for (let round = 0; round < 8; round++) {
+    const parts = response.candidates?.[0]?.content?.parts || [];
+    const funcCall = parts.find((p) => p.functionCall);
+    if (!funcCall) break;
+
+    const { name, args } = funcCall.functionCall;
+    console.log('[YouTube Tool]', name, args);
+    const toolResult = await executeFn(name, args);
+    console.log('[YouTube Tool result]', toolResult);
+
+    toolCalls.push({ name, args, result: toolResult });
+
+    if (toolResult?._chartType) charts.push(toolResult);
+    if (toolResult?._playVideo) playVideos.push(toolResult);
+    if (toolResult?._generatedImage) generatedImages.push(toolResult);
+
+    response = (
+      await chat.sendMessage([
+        { functionResponse: { name, response: { result: toolResult } } },
+      ])
+    ).response;
+  }
+
+  return { text: response.text(), charts, toolCalls, playVideos, generatedImages };
 };

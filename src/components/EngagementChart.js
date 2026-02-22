@@ -52,7 +52,7 @@ export default function EngagementChart({ data, metricColumn = 'Favorite Count' 
       <p className="engagement-chart-label">
         Mean {metricColumn} — with vs without keyword
       </p>
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={380} minHeight={360}>
         <BarChart
           data={data}
           margin={{ top: 8, right: 16, left: 0, bottom: 64 }}

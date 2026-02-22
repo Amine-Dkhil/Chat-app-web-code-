@@ -2,3 +2,51 @@
   min-height: 100vh;
   background: var(--neu-bg);
 }
+
+.app-logged-in {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0.5rem 1rem;
+  background: var(--neu-bg-subtle);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.app-tab {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: var(--neu-text-dim);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.app-tab:hover {
+  color: var(--neu-text);
+}
+
+.app-tab.active {
+  color: var(--neu-accent);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.app-tab-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-tab-content .chat-layout {
+  height: 100%;
+}

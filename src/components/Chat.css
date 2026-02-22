@@ -994,3 +994,207 @@
 .chat-empty-state p {
   margin: 0;
 }
+
+/* ── Play video card ───────────────────────────────────────────────────────── */
+.play-video-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: var(--neu-bg-subtle);
+  border-radius: var(--neu-radius-sm);
+  text-decoration: none;
+  color: var(--neu-text);
+  box-shadow: var(--neu-raised-sm);
+  transition: box-shadow 0.2s;
+  max-width: 360px;
+  margin: 0.5rem 0;
+}
+
+.play-video-card:hover {
+  box-shadow: var(--neu-inset-sm);
+}
+
+.play-video-thumb {
+  width: 120px;
+  height: 68px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--neu-bg);
+}
+
+.play-video-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-video-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--neu-text-dim);
+}
+
+.play-video-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* ── Generated image ───────────────────────────────────────────────────────── */
+.generated-image-container {
+  margin: 0.5rem 0;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.generated-image-wrap {
+  cursor: pointer;
+  border-radius: var(--neu-radius-sm);
+  overflow: hidden;
+  max-width: 400px;
+  box-shadow: var(--neu-raised-sm);
+}
+
+.generated-image-download-btn {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.875rem;
+  background: var(--neu-accent, #6366f1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.generated-image-download-btn:hover {
+  opacity: 0.9;
+}
+
+.generated-image-unavailable {
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  background: rgba(100, 100, 100, 0.2);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--neu-text-muted, #999);
+}
+
+.generated-image-img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.generated-image-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.generated-image-lightbox-inner {
+  max-width: 90vw;
+  max-height: 90vh;
+  position: relative;
+  cursor: default;
+}
+
+.generated-image-lightbox-inner img {
+  max-width: 100%;
+  max-height: 85vh;
+  border-radius: 8px;
+}
+
+.generated-image-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.generated-image-actions button {
+  padding: 0.5rem 1rem;
+  background: var(--neu-accent);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Metric vs time chart ──────────────────────────────────────────────────── */
+.metric-vs-time-chart {
+  margin: 0.75rem 0;
+  padding: 1rem;
+  background: var(--neu-bg-subtle);
+  border-radius: var(--neu-radius-sm);
+  box-shadow: var(--neu-inset-sm);
+  cursor: pointer;
+}
+
+.metric-vs-time-chart.enlarged {
+  position: fixed;
+  inset: 10%;
+  z-index: 1000;
+  cursor: default;
+  overflow: auto;
+}
+
+.metric-chart-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--neu-text-dim);
+  margin: 0 0 0.5rem;
+}
+
+.metric-chart-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.metric-chart-actions button {
+  padding: 0.4rem 0.8rem;
+  background: var(--neu-accent);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* ── JSON chip ─────────────────────────────────────────────────────────────── */
+.json-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.65rem;
+  padding: 0.4rem 0.75rem 0.4rem 0.6rem;
+  background: var(--neu-bg-subtle);
+  border-radius: 20px;
+  max-width: 100%;
+  box-shadow: var(--neu-raised-sm);
+}
+
+.json-chip-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #a78bfa;
+}
