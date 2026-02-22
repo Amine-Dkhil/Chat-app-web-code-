@@ -98,13 +98,21 @@ function parseDuration(dur) {
   return seconds;
 }
 
+const METRIC_ALIASES = {
+  likecount: 'like_count', likes: 'like_count', likecounts: 'like_count',
+  viewcount: 'view_count', views: 'view_count', viewcounts: 'view_count',
+  commentcount: 'comment_count', comments: 'comment_count', commentcounts: 'comment_count',
+};
+
 function resolveField(videos, name) {
-  if (!videos.length) return name;
-  const first = videos[0];
-  const keys = Object.keys(first);
+  if (!name || typeof name !== 'string') return name;
+  const first = videos?.[0];
+  const keys = first ? Object.keys(first) : [];
   if (keys.includes(name)) return name;
-  const norm = (s) => s.toLowerCase().replace(/[\s_-]+/g, '');
+  const norm = (s) => String(s).toLowerCase().replace(/[\s_-]+/g, '');
   const target = norm(name);
+  const aliased = METRIC_ALIASES[target];
+  if (aliased && keys.includes(aliased)) return aliased;
   return keys.find((k) => norm(k) === target) || name;
 }
 
